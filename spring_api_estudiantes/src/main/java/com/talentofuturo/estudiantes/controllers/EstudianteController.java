@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.talentofuturo.estudiantes.exceptions.EstudianteNotFound;
 import com.talentofuturo.estudiantes.models.Estudiante;
 import com.talentofuturo.estudiantes.services.EstudianteService;
 
@@ -29,6 +30,10 @@ public class EstudianteController {
 	
 	@GetMapping("/{rut}")
 	public Estudiante findByRut(@PathVariable String rut){
+		Estudiante estudiante = estudianteService.findByRut(rut);
+		if(estudiante.getRut() == null) {
+			throw new EstudianteNotFound(String.format("El estudiante con RUT %s no existe.", rut));
+		}
 		return estudianteService.findByRut(rut);
 	}
 	
